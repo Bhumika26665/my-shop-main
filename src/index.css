@@ -1,0 +1,52 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+/* Assuming you're using Tailwind CSS, add classes directly in JSX or add to your CSS file */
+.container {
+    max-width: 1200px;
+}
+
+h1, h2, h3 {
+    margin-bottom: 1rem;
+}
+
+.category-list-item {
+    transition: transform 0.2s ease;
+}
+
+.category-list-item:hover {
+    transform: scale(1.05);
+    background-color: #f7fafc; /* Light hover effect */
+}
+
+.banner {
+    margin: 2rem 0;
+}
+
+footer {
+    background-color: #2d3748; /* Dark footer */
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+
+/* src/components/Navbar.css */
+nav {
+    transition: background-color 0.3s ease;
+}
+
+nav:hover {
+    background-color: rgba(37, 99, 235, 0.7); /* Change on hover */
+}
+
+.container {
+    max-width: 1200px; /* Optional: Adjust to your layout */
+}
