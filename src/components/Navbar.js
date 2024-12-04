@@ -1,4 +1,4 @@
-himport React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaHome, FaThList, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa'; 
 import { GiShoppingBag } from 'react-icons/gi'; 
@@ -35,8 +35,7 @@ const Navbar = () => {
         <nav className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 shadow-lg sticky top-0 z-50 transition duration-300">
             <div className="container mx-auto flex justify-between items-center">
                 <Link to="/" className="text-white text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
-                 <img src="https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/b3bzo9r4kdqr4fxqu8gf" alt="brand logo" width="500" height="600">
-                  {/*  ॐ साईं Women's collection*/}
+                    <img src="https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/b3bzo9r4kdqr4fxqu8gf" alt="brand logo" width="70" height="80">
                 </Link>
  <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
                         <FaShoppingCart className="mr-1" />
