@@ -35,8 +35,8 @@ const Navbar = () => {
         <nav className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 shadow-lg sticky top-0 z-50 transition duration-300">
             <div className="container mx-auto flex justify-between items-center">
                 <Link to="/" className="text-white text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
-                 https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/b3bzo9r4kdqr4fxqu8gf
-                    ॐ साईं Women's collection
+                 <img src="https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/b3bzo9r4kdqr4fxqu8gf" alt="Girl in a jacket" width="500" height="600">
+                    // ॐ साईं Women's collection
                 </Link>
  <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
                         <FaShoppingCart className="mr-1" />
