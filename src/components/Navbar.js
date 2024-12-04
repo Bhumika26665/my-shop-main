@@ -37,15 +37,7 @@ const Navbar = () => {
                 <Link to="/" className="text-white text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
                     <img src="https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/qdidk06bxvcibywpsyx0" alt="brand logo" width="50" height="60"></img>
                 </Link>
- <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
-                        <FaShoppingCart className="mr-1" />
-                        {/* Show the badge only when cartCount > 0 */}
-                        {cartCount > 0 && (
-                            <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {cartCount}
-                            </span>
-                        )}
-                    </Link>
+ 
                 <div className="hidden md:flex space-x-4">
                     <Link to="/" className="text-white flex items-center hover:text-gray-300 transition duration-300">
                         <FaHome className="mr-1" /> Home
@@ -58,6 +50,17 @@ const Navbar = () => {
                     </Link>
                    
                 </div>
+        <div>
+        <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
+                        <FaShoppingCart className="mr-1" />
+                        {/* Show the badge only when cartCount > 0 */}
+                        {cartCount > 0 && (
+                            <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                {cartCount}
+                            </span>
+                        )}
+                        Cart
+                    </Link></div>
 
                 <div className="relative">
                     <button onClick={toggleSearchInput} className="text-white focus:outline-none">
