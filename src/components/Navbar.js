@@ -104,15 +104,15 @@ const Navbar = () => {
                         <Link to="/products" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
                             <GiShoppingBag className="mr-1" /> Products
                         </Link>
-                        <Link to="/cart" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                        {/*<Link to="/cart" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
                             <FaShoppingCart className="mr-1" /> Cart
-                            {/* Show the badge only when cartCount > 0 */}
+                            {/* Show the badge only when cartCount > 0 
                             {cartCount > 0 && (
                                 <span className="ml-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                     {cartCount}
                                 </span>
                             )}
-                        </Link>
+                        </Link>*/}
                     </div>
                 </div>
             </div>
