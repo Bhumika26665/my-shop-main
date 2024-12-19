@@ -34,10 +34,10 @@ const Navbar = () => {
     return (
        <nav className="bg-white p-4 shadow-lg sticky top-0 z-50 transition duration-300">
     <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-[#171717] text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
+        <Link to="/" className="text-[#171717] text-2xl font-bold tracking-wide hover:text-[#ff4141] transition duration-300">
             ॐ साईं women's collection
         </Link>
-        <Link to="/cart" className="relative text-[#626262] flex items-center hover:text-gray-300 transition duration-300">
+        <Link to="/cart" className="relative text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
             <FaShoppingCart className="mr-1" />
             {cartCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -47,13 +47,13 @@ const Navbar = () => {
             Cart
         </Link>
         <div className="hidden md:flex space-x-4">
-            <Link to="/" className="text-[#626262] flex items-center hover:text-gray-300 transition duration-300">
+            <Link to="/" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
                 <FaHome className="mr-1" /> Home
             </Link>
-            <Link to="/categories" className="text-[#626262] flex items-center hover:text-gray-300 transition duration-300">
+            <Link to="/categories" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
                 <FaThList className="mr-1" /> Categories
             </Link>
-            <Link to="/products" className="text-[#626262] flex items-center hover:text-gray-300 transition duration-300">
+            <Link to="/products" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
                 <GiShoppingBag className="mr-1" /> Products
             </Link>
         </div>
@@ -91,16 +91,16 @@ const Navbar = () => {
         <div className={`fixed top-0 right-0 w-64 bg-white shadow-lg transform transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="p-4">
                 <h2 className="text-xl font-bold text-[#626262]">Menu</h2>
-                <Link to="/" className="block text-[#626262] flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                <Link to="/" className="block text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300 p-2" onClick={toggleMobileMenu}>
                     <FaHome className="mr-1" /> Home
                 </Link>
-                <Link to="/categories" className="block text-[#626262] flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                <Link to="/categories" className="block text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300 p-2" onClick={toggleMobileMenu}>
                     <FaThList className="mr-1" /> Categories
                 </Link>
-                <Link to="/products" className="block text-[#626262] flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                <Link to="/products" className="block text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300 p-2" onClick={toggleMobileMenu}>
                     <GiShoppingBag className="mr-1" /> Products
                 </Link>
-                <Link to="/cart" className="block text-[#626262] flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                <Link to="/cart" className="block text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300 p-2" onClick={toggleMobileMenu}>
                     <FaShoppingCart className="mr-1" /> Cart
                     {cartCount > 0 && (
                         <span className="ml-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
