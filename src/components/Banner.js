@@ -51,9 +51,9 @@ const Banner = ({ index }) => {
                                <a href='/products' ><button className="bg-[#ff4141] hover:bg-red-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInLeft">
                                     {banner.button1Text}
                                 </button></a>
-                                <button className="bg-[#ff4141] hover:bg-red-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInRight">
-                                    {banner.button2Text}
-                                </button>
+                                 {/* <button className="bg-[#ff4141] hover:bg-red-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInRight">
+                                     {banner.button2Text}
+                                </button>*/}
                             </div>
                         </div>
                     </div>
