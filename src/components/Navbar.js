@@ -59,7 +59,7 @@ const Navbar = () => {
         </div>
 
         <div className="relative">
-            <button onClick={toggleSearchInput} className="text-[#626262] focus:outline-none">
+            <button onClick={toggleSearchInput} className="text-[#626262] focus:outline-none hover:text-[#ff4141]">
                 <FaSearch className="w-6 h-6" />
             </button>
             {isSearchVisible && (
