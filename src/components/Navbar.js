@@ -32,12 +32,20 @@ const Navbar = () => {
     };
 
     return (
-        <nav className=" p-4 shadow-lg sticky top-0 z-50 transition duration-300">
+        <nav className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 shadow-lg sticky top-0 z-50 transition duration-300">
             <div className="container mx-auto flex justify-between items-center">
                 <Link to="/" className="text-white text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
-                    <img src="https://res.cloudinary.com/dswf2lsf4/image/upload/f_auto,q_auto/v1/logo/qdidk06bxvcibywpsyx0" alt="brand logo" width="50" height="60"></img>
+                    Ankit Gangrade Kirana
                 </Link>
- 
+ <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
+                        <FaShoppingCart className="mr-1" />
+                        {/* Show the badge only when cartCount > 0 */}
+                        {cartCount > 0 && (
+                            <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                {cartCount}
+                            </span>
+                        )}Cart
+                    </Link>
                 <div className="hidden md:flex space-x-4">
                     <Link to="/" className="text-white flex items-center hover:text-gray-300 transition duration-300">
                         <FaHome className="mr-1" /> Home
@@ -50,17 +58,6 @@ const Navbar = () => {
                     </Link>
                    
                 </div>
-        <div>
-        <Link to="/cart" className="relative text-white flex items-center hover:text-gray-300 transition duration-300">
-                        <FaShoppingCart className="mr-1" />
-                        {/* Show the badge only when cartCount > 0 */}
-                        {cartCount > 0 && (
-                            <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {cartCount}
-                            </span>
-                        )}
-                        Cart
-                    </Link></div>
 
                 <div className="relative">
                     <button onClick={toggleSearchInput} className="text-white focus:outline-none">
@@ -104,15 +101,15 @@ const Navbar = () => {
                         <Link to="/products" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
                             <GiShoppingBag className="mr-1" /> Products
                         </Link>
-                        {/*<Link to="/cart" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
+                        <Link to="/cart" className="block text-gray-700 flex items-center hover:text-blue-600 transition duration-300 p-2" onClick={toggleMobileMenu}>
                             <FaShoppingCart className="mr-1" /> Cart
-                            {/* Show the badge only when cartCount > 0 
+                            {/* Show the badge only when cartCount > 0 */}
                             {cartCount > 0 && (
                                 <span className="ml-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                     {cartCount}
                                 </span>
                             )}
-                        </Link>*/}
+                        </Link>
                     </div>
                 </div>
             </div>
