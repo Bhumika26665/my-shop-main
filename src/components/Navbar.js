@@ -35,7 +35,7 @@ const Navbar = () => {
        <nav className="bg-white p-4 shadow-lg sticky top-0 z-50 transition duration-300">
     <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-[#626262] text-2xl font-bold tracking-wide hover:text-gray-300 transition duration-300">
-            Ankit Gangrade Kirana
+            ॐ साईं women's collection
         </Link>
         <Link to="/cart" className="relative text-[#626262] flex items-center hover:text-gray-300 transition duration-300">
             <FaShoppingCart className="mr-1" />
