@@ -59,7 +59,7 @@ const ProductList = () => {
 
     return (
         <div className="container">
-            <h2 className="title">Product List</h2>
+             {/*<h2 className="title">Product List</h2>*/}
             <div className="product-grid">
                 {filteredProducts.map(product => (
                     <div key={product.id} className="product-card">
