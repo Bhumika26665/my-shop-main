@@ -9,7 +9,7 @@ const banners = [
         title: 'Big Saving!',
         description: "on ॐ साईं Women's collection Store.",
         button1Text: 'Shop Now',
-        button2Text: 'Learn More',
+        // button2Text: 'Learn More',
     },
     {
         // image: 'https://res.cloudinary.com/dtezcrxpw/image/upload/c_scale,h_615,w_1858/samples/food/spices.jpg',
@@ -17,14 +17,14 @@ const banners = [
         title: 'Special Offer!',
         description: 'Get free shipping on all orders.',
         button1Text: 'Shop Now',
-        button2Text: 'Get Details',
+        // button2Text: 'Get Details',
     },
     {
         image: 'https://via.placeholder.com/1200x400?text=Sale+Banner+3',
         title: 'Limited Time Only!',
         description: 'Exclusive deals just for you.',
         button1Text: 'Shop Now',
-        button2Text: 'Discover More',
+        // button2Text: 'Discover More',
     },
 ];
 
