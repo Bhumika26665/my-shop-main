@@ -40,7 +40,7 @@ const Banner = ({ index }) => {
                         <img 
                             src={banner.image} 
                             alt={`Banner ${index + 1}`} 
-                            className="w-full h-auto animate__animated animate__fadeIn banner"
+                            className="w-full h-auto animate__animated animate__fadeIn "
                         />
                         
                         {/* Overlay Text and Buttons */}
@@ -48,10 +48,10 @@ const Banner = ({ index }) => {
                             <h2 className="text-3xl font-bold mb-2 animate__animated animate__fadeInDown">{banner.title}</h2>
                             <p className="text-lg mb-4 animate__animated animate__fadeInUp">{banner.description}</p>
                             <div className="flex space-x-4">
-                               <a href='/products' ><button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInLeft">
+                               <a href='/products' ><button className="bg-[#ff4141] hover:bg-red-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInLeft">
                                     {banner.button1Text}
                                 </button></a>
-                                <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInRight">
+                                <button className="bg-[#ff4141] hover:bg-red-600 text-white font-bold py-2 px-4 rounded animate__animated animate__fadeInRight">
                                     {banner.button2Text}
                                 </button>
                             </div>
