@@ -88,7 +88,7 @@ const Footer = () => {
             {/* Copyright */}
             <div className="text-center mt-12">
                 <p className="text-sm text-gray-400">
-                    &copy; {new Date().getFullYear()} <a href='https://bhumika-portfolio.onrender.com' target='_blank'>Bhumika Pandey.</a> All Rights Reserved.
+                    &copy; {new Date().getFullYear()} <a href='https://bpandey.vercel.app/' target='_blank'>Bhumika Pandey.</a> All Rights Reserved.
                 </p>
             </div>
         </footer>
