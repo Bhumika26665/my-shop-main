@@ -149,7 +149,7 @@ const ProductDetails = () => {
             {relatedProducts.length > 0 && (
                 <div className="mt-10 max-w-5xl mx-auto px-4">
                     <h2 className="text-2xl font-bold mb-4">Related Products</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         {relatedProducts.map((relatedProduct) => (
                             <Link
                                 key={relatedProduct._id}
