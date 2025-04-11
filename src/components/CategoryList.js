@@ -80,9 +80,9 @@ const CategoryList = ({ setSelectedCategory }) => {
                     <h3 className="text-xl font-semibold mb-4">Products in Selected Category</h3>
                     <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                         {filteredProducts.map((product) => (
-                            <div key={product.id} className="product-card">
+                            <div key={product.id} className="product-card grid place-items-center p-4 ">
                             <Link to={`/product/${product.id}`}>
-                                <img className="product-image" src={product.image} alt={product.name} />
+                                <img className="h-60 " src={product.image} alt={product.name} />
                             </Link>
                             <div className="product-details">
                                 <Link to={`/product/${product.id}`} className="product-name">{product.name}</Link>

@@ -76,14 +76,14 @@ const FeaturedProducts = () => {
               .map((product) => (
                 <div
                   key={product._id}
-                  className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
+                  className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 grid place-items-center"
                 >
                   <Link to={`/product/${product._id}`}>
                     <img
                       src={product.image}
                       alt={product.name}
                       loading="lazy"
-                      className="h-54 object-cover rounded-lg mb-4 transition-transform duration-300 hover:scale-105"
+                      className="h-60 object-cover rounded-lg mb-4 transition-transform duration-300 hover:scale-105"
                     />
                   </Link>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.name}</h3>
