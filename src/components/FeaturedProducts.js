@@ -1,144 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
+import { Link } from 'react-router-dom';
 import axios from '../axiosConfig';
-import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Lazy-loaded components (assuming these exist)
+// const Navbar = lazy(() => import('./Navbar'));
+// const Footer = lazy(() => import('./Footer'));
 
 const FeaturedProducts = () => {
-    const [featuredProducts, setFeaturedProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null); // Store the category ID
-    const [filteredProducts, setFilteredProducts] = useState([]); // Store filtered products
-    const [quantities, setQuantities] = useState({});
-    const { addToCart } = useCart();
-    // Fetch the featured products from the API
-    useEffect(() => {
-        const fetchFeaturedProducts = async () => {
-            try {
-                const response = await axios.get('/products?featured=true');
-                setFeaturedProducts(response.data); // Store all featured products
-                setFilteredProducts(response.data); // Initially show all products
-            } catch (error) {
-                console.error('Error fetching featured products', error);
-                setError('Failed to load featured products.');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchFeaturedProducts();
-    }, []);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [quantities, setQuantities] = useState({});
+  const { addToCart } = useCart();
 
-    // Handle product click and filter by category
-    const handleProductClick = (categoryId) => {
-        console.log('Product clicked, category ID:', categoryId);
-        setSelectedCategoryId(categoryId);
-
-        // Filter products based on the selected category
-        const filtered = featuredProducts.filter(
-            (product) => product.category?.id === categoryId // Filtering based on category.id
-        );
-
-        console.log('Filtered Products:', filtered);
-        setFilteredProducts(filtered); // Update the filtered products state
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await axios.get('/products?featured=true');
+        setProducts(response.data);
+      } catch (err) {
+        setError('Failed to load featured products.');
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchFeaturedProducts();
+  }, []);
 
-    // Show loading state while data is being fetched
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+  const handleQuantityChange = (productId, quantity) => {
+    setQuantities((prev) => ({ ...prev, [productId]: quantity }));
+  };
 
-    // Show error state if there's an issue fetching the data
-    if (error) {
-        return <div className="text-red-600">{error}</div>;
-    }
-    const handleQuantityChange = (productId, quantity) => {
-        setQuantities(prev => ({ ...prev, [productId]: quantity }));
-    };
-    const handleAddToCart = (product) => {
-        const quantity = quantities[product.id] || 1; // Default to 1
-        const finalPrice = quantity >= product.quantity_threshold ? product.discounted_price : product.price;
+  const handleAddToCart = (product) => {
+    const quantity = quantities[product.id] || 1;
+    const finalPrice = quantity >= product.quantity_threshold ? product.discounted_price : product.price;
+    addToCart({ ...product, quantity, price: finalPrice });
+    toast.success(`${product.name} added to cart!`, { autoClose: 2000 });
+  };
 
-        addToCart({ ...product, quantity, price: finalPrice });
-        toast.success(`${product.name} added to cart with quantity ${quantity}!`);
-    };
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* <Suspense fallback={<div className="animate-pulse h-16 bg-gray-200"></div>}>
+        <Navbar />
+      </Suspense> */}
 
-    return (
-        <div className="my-8">
-            <h2 className="text-2xl font-bold mb-4">Featured Products</h2>
+      <main className="container mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Featured Products</h2>
 
-            {/* Display Featured Products */}
-            {featuredProducts.length === 0 ? (
-                <p>No featured products available at the moment.</p>
-            ) : (
-                <>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {featuredProducts.map((product) => (
-                            product.isFeatured && (
-                                <li
-                                    key={product._id}
-                                    className="bg-white p-4 rounded-lg shadow-lg cursor-pointer"
-                                    onClick={() => handleProductClick(product.category?.id)} // Passing category ID
-                                >
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-48 object-cover mb-4 rounded-lg"
-                                    />
-                                    <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
-                                    {/* <p className="text-blue-600 font-bold text-xl">₹{product.price}</p> */}
-                                </li>
-                            )
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="h-48 w-full bg-gray-200 rounded-lg"></div>
+                <div className="h-6 w-3/4 bg-gray-200 mt-4 rounded"></div>
+                <div className="h-4 w-1/2 bg-gray-200 mt-2 rounded"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          products.length === 0 ? (
+            <p className="text-gray-600 text-center">No featured products available.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products
+                .filter((product) => product.isFeatured)
+                .map((product) => (
+                  <div
+                    key={product._id}
+                    className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
+                  >
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        loading="lazy"
+                        className="w-full h-48 object-cover rounded-lg mb-4 transition-transform duration-300 hover:scale-105"
+                      />
+                    </Link>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.name}</h3>
+                    <p className="text-green-600 font-medium mb-4">₹{product.price}</p>
+
+                    <div className="flex items-center gap-4">
+                      <label htmlFor={`quantity-${product._id}`} className="sr-only">
+                        Quantity for {product.name}
+                      </label>
+                      <select
+                        id={`quantity-${product._id}`}
+                        value={quantities[product._id] || 1}
+                        onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
+                        className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        {[...Array(product.countInStock).keys()].map((q) => (
+                          <option key={q + 1} value={q + 1}>
+                            {q + 1}
+                          </option>
                         ))}
-                    </ul>
+                      </select>
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                        aria-label={`Add ${product.name} to cart`}
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )
+        )}
+      </main>
 
-                    {/* Show Products Filtered by Category */}
-                    {selectedCategoryId && (
-                        <div className="mt-8">
-                            <h3 className="text-xl font-semibold">Products in the same category</h3>
+      {/* <Suspense fallback={<div className="animate-pulse h-32 bg-gray-200"></div>}>
+        <Footer />
+      </Suspense> */}
 
-                            {/* Show filtered products based on the selected category */}
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {filteredProducts.length === 0 ? (
-                                    <p>No products found in this category.</p>
-                                ) : (
-                                    filteredProducts.map((product) => (
-                                        <div key={product.id} className="product-card">
-                            <Link to={`/product/${product.id}`}>
-                                <img className="product-image" src={product.image} alt={product.name} />
-                            </Link>
-                            <div className="product-details">
-                                <Link to={`/product/${product.id}`} className="product-name">{product.name}</Link>
-                                <p className="product-price">₹{product.price}</p>
-                                <label className="quantity-label">Quantity:</label>
-                                <select
-                                    onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value, 10))}
-                                    className="quantity-select"
-                                >
-                                    {[...Array(product.countInStock).keys()].map(q => (
-                                        <option key={q + 1} value={q + 1}>{q + 1}</option>
-                                    ))}
-                                </select>
-                                <button
-                                    onClick={() => handleAddToCart(product)}
-                                    className="add-to-cart-button"
-                                >
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                                    ))
-                                )}
-                            </ul>
-                            <ToastContainer />
-                        </div>
-                    )}
-                </>
-            )}
-        </div>
-    );
+      <ToastContainer position="bottom-right" theme="colored" />
+    </div>
+  );
 };
 
 export default FeaturedProducts;
