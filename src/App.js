@@ -10,7 +10,6 @@ import Cart from './components/Cart';
 import LoginPage from './pages/LoginPage';
 import ProductDetails from './components/ProductDetails';
 import Navbar from './components/Navbar';
-import CartLocalStorageTest from './components/CartLocalStorageTest';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { StockNotificationProvider } from './context/StockNotificationContext';
@@ -59,9 +58,6 @@ const AppContent = () => {
                             <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
                             <Route path="/orders" element={isAuthenticated ? <Orders /> : <Navigate to="/login" />} />
                         </Routes>
-                        
-                        {/* Cart LocalStorage Test Component */}
-                        <CartLocalStorageTest />
                     </div>
                 </StockNotificationProvider>
             </CartProvider>

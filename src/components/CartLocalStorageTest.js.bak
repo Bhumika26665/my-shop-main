@@ -1,0 +1,54 @@
+import React from 'react';
+import { useCart } from '../context/CartContext';
+
+const CartLocalStorageTest = () => {
+    const { cart, getCartCount, clearCart } = useCart();
+
+    const testLocalStorage = () => {
+        console.log('Current cart:', cart);
+        console.log('Cart count:', getCartCount());
+        
+        // Check localStorage
+        const savedCart = localStorage.getItem('bhumika-shop-cart');
+        console.log('Saved cart in localStorage:', savedCart ? JSON.parse(savedCart) : null);
+        
+        // Test if they match
+        const parsedSavedCart = savedCart ? JSON.parse(savedCart) : [];
+        const match = JSON.stringify(cart) === JSON.stringify(parsedSavedCart);
+        console.log('Cart matches localStorage:', match);
+        
+        alert(`Cart items: ${getCartCount()}\nSaved in localStorage: ${match ? 'Yes' : 'No'}`);
+    };
+
+    const clearAndTest = () => {
+        clearCart();
+        setTimeout(() => {
+            console.log('Cart cleared');
+            console.log('LocalStorage after clear:', localStorage.getItem('bhumika-shop-cart'));
+            alert('Cart cleared! Check localStorage in browser console.');
+        }, 100);
+    };
+
+    return (
+        <div style={{ 
+            position: 'fixed', 
+            bottom: '20px', 
+            right: '20px', 
+            background: '#f0f0f0', 
+            padding: '10px', 
+            borderRadius: '8px',
+            fontSize: '12px',
+            zIndex: 1000
+        }}>
+            <div>🛒 Cart: {getCartCount()} items</div>
+            <button onClick={testLocalStorage} style={{ margin: '5px', padding: '5px' }}>
+                Test LocalStorage
+            </button>
+            <button onClick={clearAndTest} style={{ margin: '5px', padding: '5px' }}>
+                Clear & Test
+            </button>
+        </div>
+    );
+};
+
+export default CartLocalStorageTest;
