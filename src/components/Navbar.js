@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaHome, FaThList, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa'; 
 import { GiShoppingBag } from 'react-icons/gi'; 
-import './components.css'; // Ensure the path is correct
+import './components.css';
 import { useCart } from '../context/CartContext';
-const Navbar = () => {
+import { useAuth } from '../context/AuthContext';
+import axios from '../axiosConfig';
+
+const Navbar = ({ isAuthenticated }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const { logout } = useAuth();
 
     // Use the cart context to get the cart and its length
-    const { cart } = useCart(); // Cart state from context
-    const cartCount = cart.length; // Number of items in the cart
+    const { getCartCount } = useCart(); // Cart state from context
+    const cartCount = getCartCount(); // Number of items in cart (including quantities)
 
     const navigate = useNavigate();
 
@@ -28,6 +32,20 @@ const Navbar = () => {
         e.preventDefault();
         if (searchTerm.trim()) {
             navigate(`/products?search=${searchTerm}`);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            // Call backend logout endpoint to clear server-side cookies
+            await axios.post('/users/logout');
+            logout();
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force logout even if API call fails
+            logout();
+            navigate('/');
         }
     };
 
@@ -56,6 +74,30 @@ const Navbar = () => {
             <Link to="/products" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
                 <GiShoppingBag className="mr-1" /> Products
             </Link>
+            {isAuthenticated && (
+                <>
+                    <Link to="/admin" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
+                        Admin
+                    </Link>
+                    <Link to="/orders" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
+                        Orders
+                    </Link>
+                    <Link to="/users" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
+                        Users
+                    </Link>
+                    <button 
+                        onClick={handleLogout}
+                        className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300 bg-transparent border-none cursor-pointer"
+                    >
+                        Logout
+                    </button>
+                </>
+            )}
+            {!isAuthenticated && (
+                <Link to="/login" className="text-[#626262] flex items-center hover:text-[#ff4141] transition duration-300">
+                    Login
+                </Link>
+            )}
         </div>
 
         <div className="relative">

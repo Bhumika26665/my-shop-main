@@ -1,14 +1,40 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import CookieService from '../services/cookieService';
 
 const CartContext = createContext();
+
+// Helper functions for localStorage
+const saveCartToLocalStorage = (cart) => {
+    try {
+        localStorage.setItem('bhumika-shop-cart', JSON.stringify(cart));
+    } catch (error) {
+        console.error('Error saving cart to localStorage:', error);
+    }
+};
+
+const loadCartFromLocalStorage = () => {
+    try {
+        const savedCart = localStorage.getItem('bhumika-shop-cart');
+        return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+        return [];
+    }
+};
 
 export const useCart = () => {
     return useContext(CartContext);
 };
 
 export const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState([]);
+    // Initialize cart from localStorage on component mount
+    const [cart, setCart] = useState(() => loadCartFromLocalStorage());
+    
+    // Save cart to localStorage whenever it changes
+    useEffect(() => {
+        saveCartToLocalStorage(cart);
+    }, [cart]);
     const [shippingDetails, setShippingDetails] = useState({
         shippingAddress1: '',
         shippingAddress2: '',
@@ -27,25 +53,59 @@ export const CartProvider = ({ children }) => {
     });
 
     const addToCart = (product) => {
-        const existingProduct = cart.find(item => item._id === product._id);
+        // Create a unique key for the product combination (ID + size + color)
+        const colorName = product.selectedColor && typeof product.selectedColor === 'object' 
+            ? product.selectedColor.name 
+            : product.selectedColor || 'default';
+            
+        const uniqueKey = `${product._id}_${product.selectedSize || 'default'}_${colorName}`;
+        
+        const existingProduct = cart.find(item => {
+            const itemColorName = item.selectedColor && typeof item.selectedColor === 'object' 
+                ? item.selectedColor.name 
+                : item.selectedColor || 'default';
+            const itemKey = `${item._id}_${item.selectedSize || 'default'}_${itemColorName}`;
+            return itemKey === uniqueKey;
+        });
     
         if (existingProduct) {
-            setCart(cart.map(item =>
-                item._id === product._id
-                    ? { ...item, quantity: item.quantity + product.quantity } // Increment by selected quantity
-                    : item
-            ));
+            setCart(cart.map(item => {
+                const itemColorName = item.selectedColor && typeof item.selectedColor === 'object' 
+                    ? item.selectedColor.name 
+                    : item.selectedColor || 'default';
+                const itemKey = `${item._id}_${item.selectedSize || 'default'}_${itemColorName}`;
+                return itemKey === uniqueKey
+                    ? { ...item, quantity: item.quantity + product.quantity }
+                    : item;
+            }));
         } else {
-            setCart([...cart, { ...product }]); // Add product with the selected quantity
+            setCart([...cart, { ...product, uniqueKey }]); // Add product with unique identifier
         }
     };
     
-    const removeFromCart = (productId) => {
-        setCart((prevCart) => prevCart.filter(item => item._id !== productId));
+    const removeFromCart = (uniqueKey) => {
+        setCart((prevCart) => prevCart.filter(item => item.uniqueKey !== uniqueKey));
+    };
+
+    const updateQuantity = (uniqueKey, newQuantity) => {
+        if (newQuantity < 1) return;
+        setCart((prevCart) =>
+            prevCart.map(item =>
+                item.uniqueKey === uniqueKey
+                    ? { ...item, quantity: newQuantity }
+                    : item
+            )
+        );
+    };
+
+    const getCartCount = () => {
+        return cart.reduce((total, item) => total + (item.quantity || 1), 0);
     };
 
     const clearCart = () => {
         setCart([]);
+        // Clear cart from localStorage
+        localStorage.removeItem('bhumika-shop-cart');
     };
 
     const validateShippingDetails = () => {
@@ -63,18 +123,44 @@ export const CartProvider = ({ children }) => {
         }, 0);
     };
 
+    const calculateShippingCost = () => {
+        const totalPrice = calculateTotalPrice();
+        return totalPrice >= 999 ? 0 : 50; // Free shipping above ₹999, otherwise ₹50
+    };
+
+    const calculateTotalWithShipping = () => {
+        return calculateTotalPrice() + calculateShippingCost();
+    };
+
     const placeOrder = async () => {
         if (!validateShippingDetails()) {
             alert('Please fill in all required shipping details.');
             return;
         }
 
-        const totalPrice = calculateTotalPrice(); // Recalculate total price for the order
+        const token = CookieService.getAccessToken();
+        if (!token) {
+            alert('Please login to place an order.');
+            return;
+        }
+
+        const user = CookieService.getUser();
+        if (!user || !user.id) {
+            alert('User information not found. Please login again.');
+            return;
+        }
+
+        const totalPrice = calculateTotalPrice();
 
         const orderData = {
             orderItems: cart.map(item => ({
-                quantity: item.quantity,
-                product: item._id
+                quantity: item.quantity || 1,
+                product: item._id,
+                selectedSize: item.selectedSize || 'One Size',
+                selectedColor: item.selectedColor ? {
+                    name: item.selectedColor.name,
+                    value: item.selectedColor.value
+                } : null
             })),
             shippingAddress1: shippingDetails.shippingAddress1,
             shippingAddress2: shippingDetails.shippingAddress2,
@@ -83,21 +169,29 @@ export const CartProvider = ({ children }) => {
             country: shippingDetails.country,
             phone: shippingDetails.phone,
             totalPrice: totalPrice,
-            user: 'user_id_here', // Replace with actual user ID
+            user: user.id,
         };
 
         try {
-            await axios.post('https://bhumika-eshop-backend.onrender.com/api/v1/orders', orderData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://bhumika-eshop-backend.onrender.com/api/v1'}/orders`, orderData);
 
-            alert('Order placed successfully!');
-            clearCart();
+            if (response.data) {
+                alert('Order placed successfully!');
+                clearCart();
+                // Reset shipping details
+                setShippingDetails({
+                    shippingAddress1: '',
+                    shippingAddress2: '',
+                    city: '',
+                    zip: '',
+                    country: '',
+                    phone: ''
+                });
+            }
         } catch (error) {
             console.error('Error placing order:', error);
-            alert('Failed to place order. Please try again.');
+            const errorMessage = error.response?.data?.message || error.response?.data || 'Failed to place order. Please try again.';
+            alert(errorMessage);
         }
     };
 
@@ -106,13 +200,17 @@ export const CartProvider = ({ children }) => {
             cart,
             addToCart,
             removeFromCart,
+            updateQuantity,
             clearCart,
-            totalPrice: calculateTotalPrice(), // Ensure this uses the updated logic
+            getCartCount,
+            totalPrice: calculateTotalPrice(),
+            shippingCost: calculateShippingCost(),
+            totalWithShipping: calculateTotalWithShipping(),
             placeOrder,
             shippingDetails,
-            setShippingDetails, // Provide method to update shipping details
-            pickupDetails, // Provide pickupDetails
-            setPickupDetails // Provide method to update pickup details
+            setShippingDetails,
+            pickupDetails,
+            setPickupDetails
         }}>
             {children}
         </CartContext.Provider>

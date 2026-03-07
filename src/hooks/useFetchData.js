@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../axiosConfig'; // Adjust according to your setup
 
-const useFetchData = (endpoint, token) => {
+const useFetchData = (endpoint) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -10,12 +10,11 @@ const useFetchData = (endpoint, token) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axiosInstance.get(endpoint, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await axiosInstance.get(endpoint);
             setData(response.data);
         } catch (err) {
             setError('Error fetching data');
+            console.error('Fetch error:', err);
         } finally {
             setLoading(false);
         }
@@ -23,7 +22,7 @@ const useFetchData = (endpoint, token) => {
 
     useEffect(() => {
         fetchData(); // Fetch data on initial render
-    }, [endpoint, token]);
+    }, [endpoint]);
 
     return { data, error, loading, fetchData }; // Make sure to return fetchData
 };
