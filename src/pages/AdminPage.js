@@ -1,5 +1,5 @@
 // src/pages/AdminPage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axiosInstance from '../axiosConfig';
 import AdminProductForm from '../components/AdminProductForm';
 import AdminProductList from '../components/AdminProductList';
@@ -96,28 +96,45 @@ const AdminPage = () => {
   };
 
   // Load all data
-  const loadAllData = async () => {
+  const loadAllData = useCallback(async () => {
     setLoading(true);
     try {
       const [productsData, categoriesData, ordersData, usersData] = await Promise.all([
-        fetchProducts(),
-        fetchCategories(),
-        fetchOrders(),
-        fetchUsers()
+        axiosInstance.get('/products'),
+        axiosInstance.get('/categories'),
+        axiosInstance.get('/orders'),
+        axiosInstance.get('/users')
       ]);
-      
-      calculateStats(productsData, categoriesData, ordersData, usersData);
+
+      setProducts(productsData.data);
+      setCategories(categoriesData.data);
+      setOrders(ordersData.data);
+      setUsers(usersData.data);
+
+      // Calculate stats
+      setStats({
+        totalProducts: productsData.data.length,
+        totalCategories: categoriesData.data.length,
+        totalOrders: ordersData.data.length,
+        totalUsers: usersData.data.length,
+        recentOrders: ordersData.data.filter(order => 
+          new Date(order.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        ).length,
+        lowStockProducts: productsData.data.filter(product => 
+          product.countInStock < 5
+        ).length
+      });
       setError(null);
     } catch (error) {
       setError('Error loading data');
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadAllData();
-  }, []);
+  }, [loadAllData]);
 
   // Dashboard content
   const renderDashboard = () => (
