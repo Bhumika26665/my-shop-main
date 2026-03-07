@@ -7,7 +7,7 @@ import Orders from '../components/Orders';
 import AdminCategoryForm from '../components/AdminCategoryForm';
 import AdminCategoryList from '../components/AdminCategoryList';
 import CartReminderManager from '../components/CartReminderManager';
-import PushNotificationTester from '../components/PushNotificationTester';
+// import PushNotificationTester from '../components/PushNotificationTester';
 
 const AdminPage = () => {
   const [orders, setOrders] = useState([]);
@@ -437,7 +437,7 @@ const AdminPage = () => {
             </div>
           )}
           {activeSection === 'cart-reminders' && <CartReminderManager />}
-          {activeSection === 'push-tester' && <PushNotificationTester />}
+          {/* {activeSection === 'push-tester' && <PushNotificationTester />} */}
         </main>
       </div>
     </div>
