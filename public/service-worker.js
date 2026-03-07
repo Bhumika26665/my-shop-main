@@ -1,11 +1,8 @@
+/* eslint-disable */
+/* global self, caches */
+
 // Service Worker for Push Notifications
 const CACHE_NAME = 'bhumika-shop-v1';
-const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/favicon.ico'
-];
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
@@ -13,8 +10,23 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
+        console.log('Service Worker: Caching app shell');
+        // Cache essential app shell files with error handling
+        const urlsToCache = [
+          '/',
+          '/static/css/main.css',
+          '/favicon.ico',
+          '/manifest.json'
+        ];
+        
+        return Promise.all(
+          urlsToCache.map(url => {
+            return cache.add(url).catch(error => {
+              console.log('Service Worker: Failed to cache', url, error);
+              // Continue even if some files fail to cache
+            });
+          })
+        );
       })
       .then(() => {
         console.log('Service Worker: Installation complete');
